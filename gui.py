@@ -49,7 +49,7 @@ class GUI:
     def square_clicked(self, event):
         col_size = row_size = self.dim_square
         selected_column = int(event.x / col_size)
-        selected_row = int(8 - (event.y / row_size))
+        selected_row = 7 - int(event.y / row_size)
         print('X: {}\nY: {}\n---------------'.format(event.x, event.y))
         print('Selected column: {}\nSelected row: {}'.format(
             selected_column, selected_row
