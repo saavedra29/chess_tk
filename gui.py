@@ -48,8 +48,12 @@ class GUI:
 
     def square_clicked(self, event):
         col_size = row_size = self.dim_square
-        selected_column = event.x / col_size
-        selected_row = 8 - (event.y / row_size)
+        selected_column = int(event.x / col_size)
+        selected_row = int(8 - (event.y / row_size))
+        print('X: {}\nY: {}\n---------------'.format(event.x, event.y))
+        print('Selected column: {}\nSelected row: {}'.format(
+            selected_column, selected_row
+        ))
         pos = self.chessboard.alpha_notation((selected_row, selected_column))
         try:
             piece = self.chessboard[pos]
