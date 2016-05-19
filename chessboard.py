@@ -92,7 +92,7 @@ class Board(dict):
     def occupied(self, color):
         result = []
 
-        for coord in self.iterkeys():
+        for coord in iter(self.keys()):
             if self[coord].color == color:
                 result.append(coord)
         return result
@@ -105,7 +105,7 @@ class Board(dict):
     def king_in_check(self, color):
         kingpos = self.position_of_king(color)
         opponent = ('black' if color == 'white' else 'white')
-        for pieces in self.iteritems():
+        for pieces in self.items():
             if kingpos in self.all_moves_available(opponent):
                 return True
             else:
@@ -114,7 +114,7 @@ class Board(dict):
     def alpha_notation(self, xycoord):
         if xycoord[0] < 0 or xycoord[0] > 7 or xycoord[1] < 0 or xycoord[
             1] > 7: return
-        return self.y_axis[xycoord[1]] + str(self.x_axis[xycoord[0]])
+        return self.y_axis[int(xycoord[1])] + str(self.x_axis[int(xycoord[0])])
 
     def num_notation(self, coord):
         return int(coord[1]) - 1, self.y_axis.index(coord[0])

@@ -1,23 +1,8 @@
-"""
-Code illustration: 4.07
-
-METHODS ADDED
-new_game (to start a new game)
-
-METHODS MODIFIED
-__init__ (menu bar and info frame added)
-shift (to change the info label after every move)
-
-
-Tkinter GUI Application Development Hotshot
-"""
 import chessboard
-import pieces
-from Tkinter import *
-from PIL import ImageTk
+import tkinter as tk
 
 
-class GUI():
+class GUI:
     pieces = {}
     selected_piece = None
     focused = None
@@ -33,23 +18,24 @@ class GUI():
         self.chessboard = chessboard
         self.parent = parent
         # Adding Top Menu
-        self.menubar = Menu(parent)
-        self.filemenu = Menu(self.menubar, tearoff=0)
+        self.menubar = tk.Menu(parent)
+        self.filemenu = tk.Menu(self.menubar, tearoff=0)
         self.filemenu.add_command(label="New Game", command=self.new_game)
         self.menubar.add_cascade(label="File", menu=self.filemenu)
         self.parent.config(menu=self.menubar)
 
         # Adding Frame
-        self.btmfrm = Frame(parent, height=64)
-        self.info_label = Label(self.btmfrm,
+        self.btmfrm = tk.Frame(parent, height=64)
+        self.info_label = tk.Label(self.btmfrm,
                                 text="   White to Start the Game  ",
                                 fg=self.color2)
-        self.info_label.pack(side=RIGHT, padx=8, pady=5)
-        self.btmfrm.pack(fill="x", side=BOTTOM)
+        self.info_label.pack(side=tk.RIGHT, padx=8, pady=5)
+        self.btmfrm.pack(fill="x", side=tk.BOTTOM)
 
         canvas_width = self.columns * self.dim_square
         canvas_height = self.rows * self.dim_square
-        self.canvas = Canvas(parent, width=canvas_width, height=canvas_height)
+        self.canvas = tk.Canvas(parent, width=canvas_width,
+                               height=canvas_height)
         self.canvas.pack(padx=8, pady=8)
         self.draw_board()
         self.canvas.bind("<Button-1>", self.square_clicked)
@@ -63,7 +49,7 @@ class GUI():
     def square_clicked(self, event):
         col_size = row_size = self.dim_square
         selected_column = event.x / col_size
-        selected_row = 7 - (event.y / row_size)
+        selected_row = 8 - (event.y / row_size)
         pos = self.chessboard.alpha_notation((selected_row, selected_column))
         try:
             piece = self.chessboard[pos]
@@ -114,7 +100,7 @@ class GUI():
                 y1 = ((7 - row) * self.dim_square)
                 x2 = x1 + self.dim_square
                 y2 = y1 + self.dim_square
-                if (self.focused is not None and (row, col) in self.focused):
+                if self.focused is not None and (row, col) in self.focused:
                     self.canvas.create_rectangle(x1, y1, x2, y2,
                                                  fill=self.highlightcolor,
                                                  tags="area")
@@ -134,14 +120,14 @@ class GUI():
 
     def draw_pieces(self):
         self.canvas.delete("occupied")
-        for coord, piece in self.chessboard.iteritems():
+        for coord, piece in self.chessboard.items():
             x, y = self.chessboard.num_notation(coord)
             if piece is not None:
-                filename = "../pieces_image/%s%s.png" % (
+                filename = "pieces_image/%s%s.png" % (
                 piece.shortname.lower(), piece.color)
                 piecename = "%s%s%s" % (piece.shortname, x, y)
-                if (filename not in self.images):
-                    self.images[filename] = ImageTk.PhotoImage(file=filename)
+                if filename not in self.images:
+                    self.images[filename] = tk.PhotoImage(file=filename)
                 self.canvas.create_image(0, 0, image=self.images[filename],
                                          tags=(piecename, "occupied"),
                                          anchor="c")
@@ -151,7 +137,7 @@ class GUI():
 
 
 def main(chessboard):
-    root = Tk()
+    root = tk.Tk()
     root.title("Chess")
     gui = GUI(root, chessboard)
     gui.draw_board()
