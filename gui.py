@@ -50,10 +50,6 @@ class GUI:
         col_size = row_size = self.dim_square
         selected_column = int(event.x / col_size)
         selected_row = 7 - int(event.y / row_size)
-        print('X: {}\nY: {}\n---------------'.format(event.x, event.y))
-        print('Selected column: {}\nSelected row: {}'.format(
-            selected_column, selected_row
-        ))
         pos = self.chessboard.alpha_notation((selected_row, selected_column))
         try:
             piece = self.chessboard[pos]
@@ -92,8 +88,8 @@ class GUI:
             piece = None
         if piece is not None and (piece.color == self.chessboard.player_turn):
             self.selected_piece = (self.chessboard[pos], pos)
-            self.focused = map(self.chessboard.num_notation,
-                               (self.chessboard[pos].moves_available(pos)))
+            self.focused = list(map(self.chessboard.num_notation,
+                               (self.chessboard[pos].moves_available(pos))))
 
     def draw_board(self):
         color = self.color2
@@ -104,7 +100,7 @@ class GUI:
                 y1 = ((7 - row) * self.dim_square)
                 x2 = x1 + self.dim_square
                 y2 = y1 + self.dim_square
-                if self.focused is not None and (row, col) in self.focused:
+                if (self.focused is not None and (row, col) in self.focused):
                     self.canvas.create_rectangle(x1, y1, x2, y2,
                                                  fill=self.highlightcolor,
                                                  tags="area")
